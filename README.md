@@ -3,9 +3,8 @@
 One ESP32-S3 firmware runs on both grips. Set `HANDHELD_SIDE` in
 `main/handheld_config.h` to build for the left or right grip.
 
-The stick, three switches, and two indicator LEDs are implemented for hardware
-bring-up. ESP-NOW, battery, haptics, and OTA remain interface stubs, so this is
-not yet a working wireless controller.
+The stick, switches, LEDs, and ESP-NOW input link are implemented for hardware
+bring-up. Battery, haptics, and OTA remain interface stubs.
 
 ## Fresh-clone build
 
@@ -54,7 +53,8 @@ GPIO5 and GPIO6 remain free for the planned I²C IMU.
 After flashing, `idf.py monitor` prints the signed stick values every 500 ms,
 plus bumper, stick click, and trigger states. The
 digital trigger reports `0` or `32767`; the report type remains `int16_t` for a
-future analog trigger. The green LED blinks while this input test is running;
+future analog trigger. The green LED blinks until the mat acknowledges a report,
+then stays on while acknowledgments continue;
 the red LED turns on if an input read fails. Leave the joystick centered during
 startup: firmware waits two seconds, averages 32 readings to calibrate its
 resting position, and prints the measured center. Each update averages 8
@@ -67,6 +67,19 @@ pressed, check that its GPIO and GND wires reach opposite sides of the switch;
 two pins on the same side of a four-leg tactile switch are usually connected.
 If an axis still flickers while the stick is untouched, place a 100 nF ceramic
 capacitor from that ADC input (GPIO1 or GPIO2) to GND, close to the ESP32-S3.
+
+## ESP-NOW input link
+
+Flash the matching `gamr-new` mat firmware as well. Both devices use ESP-NOW
+channel 1. The handheld samples and broadcasts its grip report every 20 ms;
+`HANDHELD_SIDE` selects left or right. The mat accepts these reports only in
+gamepad mode, merges them into its existing HID gamepad report, and returns an
+acknowledgment with the report sequence. `link=up` and `accepted` in the handheld
+monitor mean the mat applied the report to gamepad state. The BLE HID send in the
+mat main loop remains responsible for sending that state to a connected TV;
+the acknowledgment does not confirm that the TV received it. The mat releases
+grip controls if no report arrives for 500 ms. Pairing, encryption, and OTA over
+ESP-NOW are later work.
 
 ## Repository layout
 
