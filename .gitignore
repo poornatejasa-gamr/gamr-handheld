@@ -1,0 +1,78 @@
+# Local design notes
+/docs/
+
+# macOS and directory metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+.directory
+
+# Temporary files and logs
+*~
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+
+# Local generated artifacts and reference documents
+/output/
+/tmp/
+*.pdf
+
+# Build artifacts
+**/build/
+*.o
+*.a
+*.out
+*.exe
+*.bin
+*.elf
+*.map
+flasher_args.json
+
+# ESP-IDF generated files and local tools
+/components/.idf/
+**/components/.idf/
+/managed_components/
+/.espressif/
+sdkconfig.old
+
+# Old root-level config files; active config lives in idf-env/
+/partitions.csv
+/sdkconfig
+/sdkconfig.defaults
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+
+# Python generated files and environments
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.egg-info/
+dist/
+venv/
+.venv/
+env/
+
+# Language server and editor caches
+.clangd/
+.ccls-cache/
+compile_commands.json
+/.cache/
+.vscode/
+
+# Windows and user-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.user
+*.workspace
+*.suo
+*.sln.docstates
