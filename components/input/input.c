@@ -8,8 +8,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#define STICK_X_CHANNEL ADC_CHANNEL_0 /* GPIO1 */
-#define STICK_Y_CHANNEL ADC_CHANNEL_1 /* GPIO2 */
+#define STICK_X_CHANNEL ADC_CHANNEL_1 /* GPIO2: horizontal on the tested joystick */
+#define STICK_Y_CHANNEL ADC_CHANNEL_0 /* GPIO1: vertical on the tested joystick */
 #define BUMPER_PIN GPIO_NUM_7
 #define TRIGGER_PIN GPIO_NUM_8
 #define STICK_CLICK_PIN GPIO_NUM_9
@@ -26,6 +26,7 @@ static esp_err_t read_axis(adc_channel_t channel, int samples, int *value)
 {
     int sum = 0;
     for (int i = 0; i < samples; i++) {
+
         int raw;
         esp_err_t err = adc_oneshot_read(adc, channel, &raw);
         if (err != ESP_OK) {
@@ -135,7 +136,8 @@ esp_err_t input_read(handheld_report_t *report){
         return err;
     }
 
-    report->stick_x = map_axis(x, center_x);
+    /* The horizontal voltage falls when the stick moves right. */
+    report->stick_x = -map_axis(x, center_x);
     report->stick_y = map_axis(y, center_y);
     report->trigger = gpio_get_level(TRIGGER_PIN) == 0 ? INT16_MAX : 0;
     report->bumper = gpio_get_level(BUMPER_PIN) == 0;

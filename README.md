@@ -44,6 +44,11 @@ exceed 3.3 V at the ESP32-S3 pins. Connect all grounds together.
 | Red LED | Anode (+) through 220 Ω | GPIO17 |
 | Both LEDs | Cathode (short leg, −) | GND |
 
+On the tested joystick mounting, moving left/right changes VRy on GPIO2,
+and its voltage falls toward the right. The input component maps that signal
+to gamepad X and reverses its sign, so left is negative and right is positive.
+GPIO1 supplies gamepad Y. The wiring in the table stays the same.
+
 The three switch inputs use internal pull-ups, so an open switch reads released
 and a switch connected to GND reads pressed. If the joystick module's SW pin
 is already wired to its GND internally when pressed, it needs no extra wire to
