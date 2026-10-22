@@ -91,6 +91,7 @@ ESP-NOW are later work.
 - `components/` — isolated firmware modules with public APIs.
 - `main/` — application entry point and left/right grip setting.
 - `idf-env/` — ESP-IDF configuration and partition table.
+- `docs/` — current handheld architecture and MAT link behaviour.
 
 ## Components
 
